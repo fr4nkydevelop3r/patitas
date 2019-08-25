@@ -10,16 +10,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fr4nkydevelop3r/patitas.git"
+    "url": "git+https://github.com/gndx/patitas.arepa.dev.gi"
     
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/fr4nkydevelop3r/patitas/issues"
+    "url": "https://github.com/gndx/patitas.arepa.dev/issues"
   },
-  "homepage": "https://github.com/fr4nkydevelop3r/patitas#readme",
+  "homepage": "https://github.com/gndx/patitas.arepa.dev#readme",
   "dependencies": {
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
