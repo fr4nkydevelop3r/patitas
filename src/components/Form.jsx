@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import { storage, database } from '../utils/firebase';
-import { ECONNRESET } from 'constants';
 
-const Form = () => {
+const Form = props => {
+
+    const [petPhoto, setPetPhoto] = useState('');
+    const [sendForm, setSendForm] = useState(false);
 
     const handleSubmit = event => {
-        event.preventDefault();
+        event.preventDefault(); //para que no haga reload de la pagina  ni pase por url los parametros que esta obtiendo
         const form = new FormData(event.target);
         const newDate = new Date().toISOString();
 
@@ -15,16 +18,16 @@ const Form = () => {
             'description': form.get('description'),
             'gender': form.get('gender'),
             'name': form.get('name'),
-            'photo': '',
-            'profilePic': '',
+            'photo': petPhoto,
+            'profilePic': props.user.photoURL,
             'type': form.get('type'),
-            'userContact': '',
-            'userName': ''
+            'userContact': props.user.email,
+            'userName': props.user.displayName,
         }
 
         database.ref('pets').push(data)
-            .then(response => console.log(response))
-            .catch(error => console.log(error))
+            .then(response => setSendForm(true))
+            .catch(error => setSendForm(false))
     }
     
     const onChange = event => {
@@ -35,40 +38,55 @@ const Form = () => {
         uploadFile
             .then((snapshot) => {
                 snapshot.ref.getDownloadURL()
-                    .then(downloadURL => console.log(downloadURL));
+                    .then(downloadURL => setPetPhoto(downloadURL));
             })
     }
 
     return(
         <div className='Form'>
-            <div className='Form-header'>
+            <div className='Form-head'>
                 <h2>Dar en adopcion</h2>
             </div>
-            <div className='Form-item'>
-                <form onSubmit={handleSubmit}>
-                    <input name='name' type='text' placeholder='Nombre de tu mascota' />
-                    <input name='description' type='text' placeholder='Describe tu mascota' />
-                    <select name='type'>
-                        <option disabled selected>Seleccionar</option>
-                        <option value='cat'>Gato</option>
-                        <option value='dog'>Perro</option>
-                    </select>
-                    <select name='gender'>
-                        <option disabled selected>Seleccionar</option>
-                        <option value='male'>Macho</option>
-                        <option value='female'>Hembra</option>
-                    </select>
-                    <select name='adopt'>
-                        <option disabled selected>Seleccionar</option>
-                        <option value='true'>Dar en adopcion</option>
-                        <option value='false'>Cuidar</option>
-                    </select>
-                    <input type='file' onChange={onChange} name='photo'  />
-                    <button>Enviar</button>
-                </form>
-            </div>
+            {sendForm &&
+                <div className='Form-send'>
+                    <span>Guardado con exito!</span>
+                </div>
+            }
+
+            {!sendForm &&
+
+                <div className='Form-item'>
+                    <form onSubmit={handleSubmit}>
+                        <input name='name' type='text' placeholder='Nombre de tu mascota' />
+                        <input name='description' type='text' placeholder='Describe tu mascota' />
+                        <select name='type'>
+                            <option disabled selected>Seleccionar</option>
+                            <option value='cat'>Gato</option>
+                            <option value='dog'>Perro</option>
+                        </select>
+                        <select name='gender'>
+                            <option disabled selected>Seleccionar</option>
+                            <option value='male'>Macho</option>
+                            <option value='female'>Hembra</option>
+                        </select>
+                        <select name='adopt'>
+                            <option disabled selected>Seleccionar</option>
+                            <option value='true'>Dar en adopcion</option>
+                            <option value='false'>Cuidar</option>
+                        </select>
+                        <input type='file' onChange={onChange} name='photo'  />
+                        <button>Enviar</button>
+                    </form>
+                </div>
+            }
         </div>
     );
 }
 
-export default Form;
+const mapStateToProps = state => {
+    return {
+        user: state.user,
+    }
+}
+
+export default connect(mapStateToProps)(Form);

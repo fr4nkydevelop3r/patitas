@@ -1,6 +1,7 @@
 import React from 'react';
 import useGetPets from '../hooks/index';
 import PetItem from '../components/PetItem';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
     
@@ -14,10 +15,15 @@ const Home = () => {
                 <div className='Home-items'>
 
                     {pets.map((pet, index) => 
-                        <PetItem 
-                            key = {`pet-${index}`}
-                            pet={pet}
-                        />    
+                        
+                        <Link to={{
+                            pathname: `/mascotas/${index}-${pet.name}`,
+                            state: { ...pet }
+                        }}
+                        key={index}>
+                            <PetItem pet={pet} key = {`pet-${index}`}  />     
+                        </Link>
+                           
                     )}
 
                 </div>
