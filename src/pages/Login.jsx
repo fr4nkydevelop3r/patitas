@@ -3,17 +3,18 @@ import { connect } from 'react-redux';
 import { auth, provider } from '../utils/firebase';
 import { setUser, setLogin } from '../actions/index';
 
-
 const Login = (props) =>  { 
-    console.log(props);
     const loginFacebook = () => {
         auth().signInWithPopup(provider)
             .then(({ user }) => {
                 props.setUser(user);
+                //console.log(props.setUser(user));
                 props.setLogin(true);
+                //console.log(props.setLogin(true));
                 props.history.push('/panel');
             });
     }
+
 
 
     return(

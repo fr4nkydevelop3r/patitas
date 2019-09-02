@@ -7,7 +7,7 @@ const Home = () => {
     
     const API = 'https://us-central1-patitas-f4252.cloudfunctions.net/api';
     const pets = useGetPets(API);
-    console.log(pets);
+    //console.log(pets);
     
     return(
         <div className='Home'>

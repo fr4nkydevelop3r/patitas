@@ -11,9 +11,12 @@ const Form = props => {
         event.preventDefault(); //para que no haga reload de la pagina  ni pase por url los parametros que esta obtiendo
         const form = new FormData(event.target);
         const newDate = new Date().toISOString();
-
+        //console.log('Al momento del submit!' + petPhoto);
+        
+        const adopt  = JSON.parse(form.get('adopt'));
+        
         const data = {
-            'adopt': form.get('adopt'),
+            'adopt': adopt,
             'date': newDate,
             'description': form.get('description'),
             'gender': form.get('gender'),
@@ -33,12 +36,15 @@ const Form = props => {
     const onChange = event => {
         const file = event.target.files[0];
         const storageRef = storage.ref();
-        const name = (+new Date()) + '-' + file.name;
+        const name = (new Date()) + '-' + file.name;
         const uploadFile = storageRef.child(name).put(file);
         uploadFile
             .then((snapshot) => {
                 snapshot.ref.getDownloadURL()
-                    .then(downloadURL => setPetPhoto(downloadURL));
+                    .then(downloadURL => {
+                        console.log(downloadURL);
+                        setPetPhoto(downloadURL);  
+                    })  
             })
     }
 
@@ -60,19 +66,19 @@ const Form = props => {
                         <input name='name' type='text' placeholder='Nombre de tu mascota' />
                         <input name='description' type='text' placeholder='Describe tu mascota' />
                         <select name='type'>
-                            <option disabled selected>Seleccionar</option>
+                            <option disabled >Seleccionar</option>
                             <option value='cat'>Gato</option>
                             <option value='dog'>Perro</option>
                         </select>
                         <select name='gender'>
-                            <option disabled selected>Seleccionar</option>
+                            <option disabled >Seleccionar</option>
                             <option value='male'>Macho</option>
                             <option value='female'>Hembra</option>
                         </select>
                         <select name='adopt'>
-                            <option disabled selected>Seleccionar</option>
-                            <option value='true'>Dar en adopcion</option>
-                            <option value='false'>Cuidar</option>
+                            <option disabled>Seleccionar</option>
+                            <option value={true}>Dar en adopcion</option>
+                            <option value={false}>Cuidar</option>
                         </select>
                         <input type='file' onChange={onChange} name='photo'  />
                         <button>Enviar</button>

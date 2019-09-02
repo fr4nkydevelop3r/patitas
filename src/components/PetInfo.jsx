@@ -1,6 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 const PetInfo = props => {
+
+    console.log(props);
+
     return(
         <div className='PetInfo'>
             <div className='PetInfo-container'>
@@ -28,11 +32,11 @@ const PetInfo = props => {
                         </div>
                         <div className="PetInfo-profile-adopt">
                             <div className='PetInfo-item'>
-                                <h3>Datos de contacto</h3>
+                               <h3>Datos de contacto</h3>
                                 <span>Owner:</span>
-                                <h4>Oscar Barajas</h4>
+                                <h4>{props.user.displayName}</h4>
                                 <span>Correo:</span>
-                                <h4>Oscar@dragons.mx</h4>
+                               <h4>{props.user.email}</h4> 
                             </div>
                         </div>
 
@@ -45,4 +49,12 @@ const PetInfo = props => {
     );
 }
 
-export default PetInfo;
+const mapStateToProps = state => {
+    //console.log(state);
+    return {
+        user : state.user,
+    }
+}
+
+
+export default connect(mapStateToProps)(PetInfo);

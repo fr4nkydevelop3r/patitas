@@ -3,6 +3,8 @@ import moment from 'moment';
 
 const PetItem = props => {
 
+    console.log(props);
+
     const date  = moment(props.pet.date, 'YYYYMMDD').fromNow();
 
     return(
@@ -18,9 +20,14 @@ const PetItem = props => {
                     {props.pet.type === 'dog' && '\u{1F436}'}
                     {props.pet.type === 'cat' && '\u{1F431}'}
                 </span>
-                {props.pet.adopt &&
+                {props.pet.adopt === true &&
                     <div className='Pets-type'>
                     Adopcion
+                </div>
+                }
+                {props.pet.adopt === false &&
+                    <div className='Pets-type'>
+                    Cuidar
                 </div>
                 }
                 
